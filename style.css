@@ -1,0 +1,395 @@
+:root {
+  /* Neon Color Palette*/
+  --neon-pink: #ff33cc;   
+  --neon-blue: #33ccff;   
+  --neon-green: #ccff33;  
+  --dark-bg: #0d001a;    
+  --dark-accent: #1a0033; 
+
+  /* Chess Board Colors */
+  --light: #2c0050;     
+  --dark: #1f003a;     
+  --highlight-move: rgba(51, 204, 255, 0.6);
+  --highlight-capture: rgba(255, 51, 204, 0.4); 
+  --selected: var(--neon-green); 
+  --board-border: var(--neon-blue); 
+
+  /* Sizing */
+  --square-size: 60px; 
+  --coord-size: 20px;  
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Consolas', 'Courier New', monospace; 
+  background: var(--dark-bg); 
+  color: var(--neon-pink); 
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* Header and Controls*/
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 980px;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+h1 {
+  color: var(--neon-blue); 
+  text-shadow: 0 0 5px var(--neon-blue); 
+}
+
+.controls button, .controls select {
+  border: 2px solid var(--neon-pink); 
+  color: var(--dark-bg); 
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: 600;
+  background: var(--neon-pink); 
+  box-shadow: 0 0 5px var(--neon-pink); 
+  transition: all 0.2s ease;
+  font-family: inherit; 
+}
+
+.controls button:hover, .controls select:hover {
+  box-shadow: 0 0 10px var(--neon-pink);
+  transform: translateY(-1px);
+}
+
+.controls select {
+  background: var(--neon-green); 
+  border-color: var(--neon-green);
+  box-shadow: 0 0 5px var(--neon-green);
+}
+
+.controls select:hover {
+  box-shadow: 0 0 10px var(--neon-green);
+}
+
+
+.controls select option{
+  color: var(--dark-bg);
+  font-weight: bold;
+  background-color: var(--neon-blue); 
+}
+.main {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* Board wrapper and coordinates */
+.board-wrapper {
+  display: grid;
+  grid-template-columns: var(--coord-size) auto;
+  grid-template-rows: auto auto; 
+  justify-items: center;
+  align-items: center;
+  gap: 15px;
+  transition: transform 0.4s ease-in-out; 
+}
+.board-wrapper.rotated {
+  transform: rotate(180deg);
+}
+
+.coords, .row-numbers {
+  font-weight: bold;
+  color: var(--neon-blue); 
+  text-shadow: 0 0 3px var(--neon-blue); 
+}
+.coords {
+  display: grid;
+  grid-template-columns: repeat(8, var(--square-size));
+  grid-column: 2; 
+  grid-row: 1; 
+}
+.coords div {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  font-size: calc(var(--square-size)/3);
+}
+.row-numbers {
+  display: grid;
+  grid-template-rows: repeat(8, var(--square-size));
+  grid-column: 1; 
+  grid-row: 2; 
+  justify-content: flex-end; 
+}
+.row-numbers div {
+  display: flex;
+  justify-content: flex-end; 
+  align-items: center;
+  padding-right: 4px; 
+  font-size: calc(var(--square-size)/3);
+}
+.board-wrapper.rotated .coords div,
+.board-wrapper.rotated .row-numbers div {
+    transform: rotate(180deg);
+}
+
+/* Board and Squares */
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, var(--square-size));
+  grid-template-rows: repeat(8, var(--square-size));
+  border: 4px solid var(--board-border);
+  box-shadow: 0 0 8px var(--board-border); 
+  width: max-content;
+  grid-column: 2;
+  grid-row: 2;
+  max-width: 100vw;
+  max-height: 100vw;
+  overflow: hidden;
+}
+
+.square {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  box-shadow: none; 
+  transition: background-color 0.1s ease;
+}
+.sq-light { 
+  background: var(--light); 
+  box-shadow: none; 
+}
+.sq-dark { 
+  background: var(--dark); 
+  box-shadow: none;
+}
+
+/* Pieces */
+.piece {
+  font-size: clamp(26px, 4vmin, 42px);
+  font-weight: bold;
+  transition: transform 0.4s ease;
+  
+  /* White Pieces: Neon Green Color and Glow */
+  color: var(--neon-green); 
+  text-shadow: 
+    0 0 4px var(--neon-green), 
+    0 0 8px var(--neon-green); 
+}
+
+/* Black Pieces: Neon Pink Color and Glow */
+.piece:not([style*="text-shadow"]) { 
+    color: var(--neon-pink); 
+    text-shadow: 
+        0 0 4px var(--neon-pink), 
+        0 0 8px var(--neon-pink); 
+}
+/* White Pieces */
+.white.piece {
+  color: var(--neon-green);
+  text-shadow: 0 0 4px var(--neon-green), 0 0 8px var(--neon-green);
+}
+
+/* Black Pieces */
+.black.piece {
+  color: var(--neon-pink);
+  text-shadow: 0 0 4px var(--neon-pink), 0 0 8px var(--neon-pink);
+}
+
+.board-wrapper.rotated .piece { 
+  transform: rotate(180deg); 
+}
+
+.selected { 
+    outline: 3px solid var(--selected); 
+    outline-offset: -3px; 
+    box-shadow: inset 0 0 10px var(--selected); 
+}
+
+/* Hint moves and captures */
+.hint-move::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--highlight-move);
+  box-shadow: 0 0 5px var(--neon-blue); 
+}
+.hint-capture::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background: var(--highlight-capture);
+  box-shadow: 0 0 5px var(--neon-pink); 
+}
+
+/* Status Bar */
+.status-bar {
+  max-width: 980px;
+  margin: 12px auto 0;
+  padding: 0 10px;
+  box-sizing: border-box;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  width: 100%;
+  flex-wrap: wrap; 
+  border-top: 1px solid var(--dark-accent);
+  padding-top: 12px;
+  text-transform: uppercase;
+}
+.status-bar > div {
+    color: var(--neon-green);
+    text-shadow: 0 0 3px var(--neon-green); 
+}
+#capturedWhite, #capturedBlack {
+    color: var(--neon-pink);
+    text-shadow: 0 0 3px var(--neon-pink); 
+}
+
+#status {
+    padding: 4px 8px;
+    background-color: var(--dark-accent); 
+    border-radius: 4px;
+    border: 1px solid var(--neon-blue);
+    font-size: 1.1em;
+}
+
+#status[style*="red"] {
+    color: var(--neon-pink) !important; 
+    text-shadow: 0 0 5px var(--neon-pink); 
+    border-color: var(--neon-pink);
+}
+#status[style*="orange"] {
+    color: var(--neon-green) !important; 
+    text-shadow: 0 0 5px var(--neon-green); 
+    border-color: var(--neon-green);
+}
+#status[style*="blue"] {
+    color: var(--neon-blue) !important; 
+    text-shadow: 0 0 5px var(--neon-blue); 
+    border-color: var(--neon-blue);
+}
+#status[style*="black"] {
+    color: var(--neon-blue) !important; 
+    text-shadow: none; 
+    border-color: var(--neon-blue);
+}
+
+
+/* Responsive Styles */
+@media (max-width: 900px) {
+  :root { 
+    --square-size: 50px; 
+    --coord-size: 16px; 
+  }
+  .coords div, .row-numbers div { 
+    font-size: calc(var(--square-size)/3.2); 
+  }
+  .row-numbers div { 
+    padding-right: 2px; 
+  } 
+}
+
+@media (max-width: 600px) {
+  :root { 
+    --square-size: 40px; 
+    --coord-size: 14px; 
+  }
+  .coords div, .row-numbers div { 
+    font-size: calc(var(--square-size)/3.2); 
+  }
+  .board { 
+    max-width: 320px; 
+  }
+  .main { 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+  }
+  .row-numbers div { 
+    padding-right: 1px; 
+  }
+  .status-bar {
+    gap: 8px 12px;
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 400px) {
+  .board { 
+    max-width: 240px; 
+  }
+  .coords div, .row-numbers div { 
+    font-size: calc(var(--square-size)/3.5); 
+  }
+  .status-bar { 
+    flex-direction: column; text-align: center; 
+  }
+  .status-bar > div { 
+    margin: 0; 
+    padding: 0; 
+  }
+}
+
+@media (max-width: 350px) {
+  :root { 
+    --square-size: 32px; 
+    --coord-size: 12px; 
+  }
+
+  .board {
+    max-width: calc(var(--square-size) * 8);
+  }
+
+  .coords div, .row-numbers div { 
+    font-size: calc(var(--square-size)/3.2); 
+  }
+
+  .piece { 
+    font-size: clamp(18px, 6vmin, 28px); 
+  }
+
+  .main { 
+    flex-direction: column; 
+    align-items: center;
+    padding: 0 5px;
+    overflow-x: auto; 
+  }
+
+  .top, .status-bar {
+    flex-direction: column;
+    text-align: center;
+    gap: 6px;
+  }
+
+  .controls button, .controls select {
+    flex: 1 1 100%;
+    min-width: 100px;
+  }
+}
+/* Reset button full width on small screens */
+@media (max-width: 350px) {
+  .controls button {
+    width: 100%;
+    display: block;
+    margin: 10px 0;
+  }
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Chess Board</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Chess Board Section -->
+  <header class="top">
+    <h1>Neon Chess Board</h1>
+      <div class="controls">
+          <select id="modeSelect">
+            <option value="human">Human vs Human</option>
+            <option value="computer-w">Human (White) vs Computer</option>
+            <option value="computer-b">Human (Black) vs Computer</option>
+          </select>
+          <button id="resetBtn">Reset Game</button>
+      </div>
+  </header>
+  <main class="main">
+    <section class="board-wrapper">
+      <div class="row-numbers" id="rowLeft"></div>
+      <div id="coordsTop" class="coords"></div>
+      <div id="board" class="board"></div>
+    </section>
+    </main>
+
+  <div class="status-bar">
+    <div id="status">White to move</div>
+    <div id="capturedWhite">White captured: <span id="capW"></span></div>
+    <div id="capturedBlack">Black captured: <span id="capB"></span></div>
+  </div>
+  <!-- Javscript Code For Logic Working-->
+  <script src="main.js"></script>
+</body>
+</html>
